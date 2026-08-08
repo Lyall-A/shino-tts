@@ -1,6 +1,6 @@
 ElevenLabs compatible API for Chatterbox TTS
 
-# Setup
+## Setup
 ```bash
 python3 -m venv venv
 source venv/bin/activate
