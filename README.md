@@ -1,1 +1,9 @@
-chatterbox with an elevenlabs compatible api
+ElevenLabs compatible API for Chatterbox TTS
+
+# Setup
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+python3 main.py
+```

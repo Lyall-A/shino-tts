@@ -1,12 +1,13 @@
 {
+    "host": "0.0.0.0",
     "port": 8080,
-    "audioPrompt": "voices/Mommy ASMR.mp3",
+    "audioPrompt": "voices/DanTDM Minecon 2015.mp3",
     "audioFormat": "wav",
     "audioMimeType": "audio/wav",
-    "minP": 0.05,
-    "topP": 1,
-    "repetitionPenalty": 1.2,
     "cfgWeight": 0.1,
-    "exaggeration": 0,
-    "temperature": 0.8
+    "exaggeration": 0.8,
+    "repetitionPenalty": 1.2,
+    "temperature": 0.2,
+    "minP": 0.05,
+    "topP": 1
 }

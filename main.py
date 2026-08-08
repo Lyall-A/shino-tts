@@ -1,9 +1,12 @@
 import torch
 import torchaudio as ta
 from chatterbox.tts import ChatterboxTTS
+# from chatterbox.tts_turbo import ChatterboxTurboTTS
 from flask import Flask, request, send_file
 import json
-import io
+import tempfile
+
+from torchcodec.encoders import AudioEncoder
 
 # Load config
 with open("config.json", "r") as file:
@@ -17,21 +20,22 @@ if not device:
     else:
         device = "cpu"
 
-min_p = config.get("minP", 0.05)
-top_p = config.get("topP", 1)
-repetition_penalty = config.get("repetitionPenalty", 1.2)
-cfg_weight = config.get("cfgWeight", 0.5)
-exaggeration = config.get("exaggeration", 0.5)
-temperature = config.get("temperature", 0.8)
+host = config.get("host")
+port = config.get("port")
 audio_prompt = config.get("audioPrompt", "input.wav")
 audio_format = config.get("audioFormat", "wav")
 audio_mime_type = config.get("audioMimeType", "audio/wav")
-host = config.get("host")
-port = config.get("port")
+cfg_weight = config.get("cfgWeight", 0.5)
+exaggeration = config.get("exaggeration", 0.5)
+repetition_penalty = config.get("repetitionPenalty", 1.2)
+temperature = config.get("temperature", 0.8)
+min_p = config.get("minP", 0.05)
+top_p = config.get("topP", 1)
 
 # Load model
 print(f"Loading model with {device.upper()}...")
 model = ChatterboxTTS.from_pretrained(device=device)
+# model = ChatterboxTurboTTS.from_pretrained(device=device)
 
 # Create flask app
 app = Flask(__name__)
@@ -41,30 +45,29 @@ app = Flask(__name__)
 def text_to_speech(voice_id):
     data = request.get_json()
     text = data.get("text")
-    audio_buffer = io.BytesIO()
 
     print(f"Generating speech for text \"{text}\"...")
 
     generated = model.generate(
         text=text,
         audio_prompt_path=audio_prompt,
-        min_p=min_p,
-        top_p=top_p,
-        repetition_penalty=repetition_penalty,
         cfg_weight=cfg_weight,
         exaggeration=exaggeration,
-        temperature=temperature
+        repetition_penalty=repetition_penalty,
+        temperature=temperature,
+        min_p=min_p,
+        top_p=top_p
     )
 
-    ta.save(
-        uri=audio_buffer,
-        src=generated,
-        sample_rate=model.sr,
-        format=audio_format,
-    )
-    audio_buffer.seek(0)
-    
-    return send_file(audio_buffer, mimetype=audio_mime_type)
+    with tempfile.NamedTemporaryFile(suffix=f".{audio_format}") as file:
+        ta.save(
+            uri=file.name,
+            src=generated,
+            sample_rate=model.sr,
+            format=audio_format
+        )
+
+        return send_file(file.name, mimetype=audio_mime_type)
 
 if __name__ == "__main__":
     # Start server
