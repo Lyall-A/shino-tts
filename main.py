@@ -6,8 +6,6 @@ from flask import Flask, request, send_file
 import json
 import tempfile
 
-from torchcodec.encoders import AudioEncoder
-
 # Load config
 with open("config.json", "r") as file:
     config = json.load(file)
