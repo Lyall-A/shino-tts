@@ -2,6 +2,8 @@ ElevenLabs compatible API for Chatterbox TTS
 
 ## Setup
 ```bash
+git clone https://github.com/Lyall-A/shino-tts.git
+cd shino-tts
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
