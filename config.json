@@ -1,13 +1,13 @@
 {
     "host": "0.0.0.0",
     "port": 8080,
-    "audioPrompt": "voices/DanTDM Minecon 2015.mp3",
+    "audioPrompt": "voices/Stewie Griffin.mp3",
     "audioFormat": "wav",
     "audioMimeType": "audio/wav",
-    "cfgWeight": 0.1,
-    "exaggeration": 0.8,
+    "cfgWeight": 0.2,
+    "exaggeration": 0.4,
     "repetitionPenalty": 1.2,
-    "temperature": 0.2,
+    "temperature": 0.5,
     "minP": 0.05,
     "topP": 1
 }
